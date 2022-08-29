@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import "package:flutter/material.dart";
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shop_app/Screens/editStock.dart';
 import 'package:shop_app/Services/stock_services.dart';
 import 'package:shop_app/constants.dart';
 
@@ -10,12 +13,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final TextEditingController _sname = TextEditingController();
-  final TextEditingController _sdesc = TextEditingController();
-  final TextEditingController _sprice = TextEditingController();
-  final TextEditingController _squantity = TextEditingController();
-  final TextEditingController _scategory = TextEditingController();
-  final TextEditingController _ssubcategory = TextEditingController();
 
   List data = [];
 
@@ -26,22 +23,26 @@ class _HomeState extends State<Home> {
       setState(() {
         data = response.data as List;
       });
+    }
+    else if(response.error == "Unauthorized"){
+      Navigator.pushReplacementNamed(context, "/login");
     } else {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          title: const Text("Alert"),
-          content: Text(
-            "${response.error}",
-            style: GoogleFonts.firaSans(
-              fontSize: 18,
-              color: Colors.black,
-              letterSpacing: 1.2,
-            ),
-          ),
-        ),
-      );
+      Fluttertoast.showToast(msg: "${response.error}");
+      // showDialog(
+      //   context: context,
+      //   builder: (context) => AlertDialog(
+      //     contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      //     title: const Text("Alert"),
+      //     content: Text(
+      //       "${response.error}",
+      //       style: GoogleFonts.firaSans(
+      //         fontSize: 18,
+      //         color: Colors.black,
+      //         letterSpacing: 1.2,
+      //       ),
+      //     ),
+      //   ),
+      // );
     }
 
     return data;
@@ -118,13 +119,18 @@ class _HomeState extends State<Home> {
                               width: 1,
                             )
                           ),
-                          child: Center(
-                            child: Text(
-                              "image_not_set",
-                              style: GoogleFonts.rancho(
-                                fontSize: 18,
-                                letterSpacing: 1.2,
-                                color: Colors.grey,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> EditStock(parsed: data[index])));
+                            },
+                            child: Center(
+                              child: Text(
+                                "image_not_set",
+                                style: GoogleFonts.rancho(
+                                  fontSize: 18,
+                                  letterSpacing: 1.2,
+                                  color: Colors.grey,
+                                ),
                               ),
                             ),
                           ),

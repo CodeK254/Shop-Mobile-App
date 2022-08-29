@@ -104,7 +104,7 @@ class StockController extends Controller
     {
         $stock = Stock::findOrFail($id);
 
-        if($stock->user_id !== auth()->user()->id){
+        if($stock->user_id != auth()->user()->id){
             return response()->json([
                 'message' => 'You are not authorized to update this stock'
             ], 401);
@@ -112,7 +112,6 @@ class StockController extends Controller
 
         $attrs = $request->validate([
             'stock_name' => 'required|string|max:255',
-            'stock_description' => 'required|string|max:255',
             'stock_price' => 'required|numeric',
             'stock_quantity' => 'required|numeric',
         ]);
@@ -121,7 +120,6 @@ class StockController extends Controller
 
         $stock->update([
             'stock_name' => $attrs['stock_name'],
-            'stock_description' => $attrs['stock_description'],
             "stock_image" => $image,
             'stock_price' => $attrs['stock_price'],
             'stock_quantity' => $attrs['stock_quantity'],

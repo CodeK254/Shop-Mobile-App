@@ -41,7 +41,7 @@ class _LoadingState extends State<Loading> {
             actions: [
               TextButton(
                 child: const Text('Ok'),
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => response.error != "Unauthorized" ? Navigator.pop(context) : Navigator.pushReplacementNamed(context, "/login"),
               ),
             ],
           ),

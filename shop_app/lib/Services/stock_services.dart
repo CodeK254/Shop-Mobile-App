@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 
 import 'package:shop_app/Models/api_response.dart';
@@ -90,6 +92,58 @@ Future<ApiResponse> allStock() async {
     }
   } catch(e){
     apiResponse.error = somethingWentWrong;
+  }
+
+  return apiResponse;
+}
+
+Future<ApiResponse> updateStock(int id, String? image, String stock_name, String stock_price, String stock_quantity) async {
+  ApiResponse apiResponse = ApiResponse();
+  var token = await getToken();
+  try{
+    print("Image inside the Update Method is: $image");
+    var response = await http.put(
+      Uri.parse("$stockURL/$id"),
+      headers: {
+        "accept": "application/json",
+        "authorization": "Bearer $token",
+      },
+      body: image != null ? {
+        "stock_image": image,
+        "stock_name": stock_name,
+        "stock_price": stock_price,
+        "stock_quantity": stock_quantity,
+      }
+      :
+      {
+        "stock_name": stock_name,
+        "stock_price": stock_price,
+        "stock_quantity": stock_quantity,
+      }
+    );
+
+    print("Error made as Response StatusCode: ${response.statusCode} is achieved");
+    
+    switch(response.statusCode) {
+      case 200:
+        apiResponse.data = jsonDecode(response.body);
+        break;
+        
+      case 422:
+        final errors = jsonDecode(response.body)['errors'];
+        apiResponse.error = errors[errors.keys.elementAt(0)][0];
+        break;
+
+      case 403:
+        apiResponse.error = jsonDecode(response.body)['message'];
+        break;
+
+      default:
+        apiResponse.error = somethingWentWrong;
+        break;
+    }
+  } catch(e){
+    apiResponse.error = "Error: somethingWentWrong!!!";
   }
 
   return apiResponse;

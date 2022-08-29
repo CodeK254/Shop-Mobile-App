@@ -24,6 +24,6 @@ class Controller extends BaseController
 
         // Return the path
 
-        return "http://192.168.0.113:8000/"."/storage/".$path."/".$filename;
+        return "http://192.168.0.200:8000/"."/storage/".$path."/".$filename;
     }
 }

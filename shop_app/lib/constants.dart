@@ -9,8 +9,6 @@ const String usersURL = "$URL/users";
 const String userURL = "$usersURL/user";
 const String logoutURL = "$URL/logout";
 const String stockURL = "$URL/stock";
-const String singleStockURL = "$stockURL/{id}";
-const String favouritesURL = "$singleStockURL/favourites";
 
 // ------------------------ERRORS---------------------------
 
